@@ -1,14 +1,14 @@
 %script to make comparison between impulsiveness and other quantities
 clear;
 imp_file = '/Users/owner/Desktop/Oct_2022_Imp/imp_dev/all_and_best_Oct_2022.mat';
-imp_data = load(imp_file,'curly_Is_best_more','curly_Is_ratio_best_more', ...
-    'curly_Is_relative_best_more','bestimp_qpp_period_more_relative', ...
-    'starttimes_corr_more','maxtimes_corr_more','endtimes_corr_more', ...
+imp_data = load(imp_file,'curly_Is_best','curly_Is','curly_Is_relative',...
+    'curly_Is_relative_best','bestimp_qpp_period_relative', ...
+    'starttimes_corr','maxtimes_corr','endtimes_corr', ...
     'bestflaresname');
 
 rec_data = restore_idl('/Users/owner/Desktop/CU_Research/rec_comp_4May/recratesidl.sav');
 
-flarenames = imp_data.bestflaresname_more;
+flarenames = imp_data.bestflaresname;
 pat1 = ["C"]; 
 pat2 = ["M"];
 pat3 = ["X"];
@@ -19,11 +19,12 @@ pat_in2 = contains(flarenames,pat2);
 pat_in3 = contains(flarenames,pat3);
 
 %imp_ind = imp_data.curly_Is_best_more;
-imp_ind = imp_data.curly_Is_relative_best_more;
-imp_start = imp_data.starttimes_corr_more;
-imp_peak = imp_data.maxtimes_corr_more;
-imp_end = imp_data.endtimes_corr_more;
-qpp_per = imp_data.bestimp_qpp_period_more_relative;
+imp_ind = imp_data.curly_Is_relative_best;
+imp_start = imp_data.starttimes_corr;
+imp_peak = imp_data.maxtimes_corr;
+imp_end = imp_data.endtimes_corr;
+qpp_per = imp_data.bestimp_qpp_period_relative;
+imp_ind_all = imp_data.curly_Is_relative;
 
 recmed = rec_data.MEDIANRECS;
 recmean = rec_data.MEANRECS;
@@ -41,6 +42,7 @@ curly_I = imp_ind(:,1);
 rise_dur = (imp_peak(:,1)-imp_start(:,1))*24*3600;
 dec_dur = (imp_end(:,1)-imp_peak(:,1))*24*3600;
 overall_dur = (imp_end(:,1)-imp_start(:,1))*24*3600;
+curly_I_all = imp_ind_all(:,1);
 
 curly_I_low = curly_I(pat_in);
 recmean_low = recmean(pat_in,:);
@@ -333,12 +335,14 @@ end
 % saveas(n,'/Users/owner/Desktop/Research/MAT_SOURCE/impcomp/imp_qppper_more.png');
 % saveas(n,'/Users/owner/Desktop/qppcomp.png');
 
-%incidence of QPP period with impulsiveness
-numbin=14;
-curly_I = log(curly_I*60);
-edges = min(curly_I):(max(curly_I)-min(curly_I))/numbin:max(curly_I);
 
-imps_binned_all = discretize(curly_I,25);
+%incidence of QPP period with impulsiveness, using all flares for bins
+%high res bins
+numbin=150;
+
+
+edges = min(curly_I_all):((max(curly_I_all))-min(curly_I_all))/numbin:max(curly_I_all);
+
 
 notnan = ~isnan(qpp_peron);
 inan = isnan(qpp_peron);
@@ -368,7 +372,7 @@ xlabel('Impulsiveness [$$ln(min^{-1})$$]','fontsize',20,'interpreter','latex');
 ylabel('Count','fontsize',25,'interpreter','latex');
 
 %set(gca,'fontsize',15)
-title('Incidence of QPPs in Impulsiveness Distribution','fontsize',35,'interpreter','latex');
+title('Incidence of QPPs in Impulsiveness Distribution, High Res Bins','fontsize',25,'interpreter','latex');
 
 % saveas(f,'/Users/owner/Desktop/imp_qpp_hist_more.fig');
 % saveas(f,'/Users/owner/Desktop/imp_qpp_hist_more.png');
@@ -380,6 +384,54 @@ frac = part./all;
 noqppfrac = noqpppart./all;
 fracrel = part/sum(part);
 noqpprel = noqpppart/sum(noqpppart);
+
+%low res bins
+numbin=14;
+
+
+edges2 = min(curly_I_all):((max(curly_I_all))-min(curly_I_all))/numbin:max(curly_I_all);
+
+
+notnan = ~isnan(qpp_peron);
+inan = isnan(qpp_peron);
+imp_qpp_notnan=curly_I;
+
+for i=1:500
+    if inan(i)==1
+        0
+        imp_qpp_notnan(i)=NaN
+    end
+end
+
+imp_noqpp = curly_I(inan);
+
+m=figure(3);
+clf
+set(gca,'yscale','log')
+set(gcf,'Position',[300 300 800 500]);
+g2=histogram(curly_I,'binedges',edges2,'facecolor','magenta','facealpha',1);
+%xlim([-2.5 2.5])
+hold on
+
+h2=histogram(imp_qpp_notnan,numbin,'binedges',edges2,'facecolor','blue','facealpha',1);
+legend('All Events','Events with QPPs','fontsize',20,'interpreter','latex')
+grid on;
+xlabel('Impulsiveness [$$ln(min^{-1})$$]','fontsize',20,'interpreter','latex');
+ylabel('Count','fontsize',25,'interpreter','latex');
+
+%set(gca,'fontsize',15)
+title('Incidence of QPPs in Impulsiveness Distribution, Low Res Bins','fontsize',25,'interpreter','latex');
+
+% saveas(f,'/Users/owner/Desktop/imp_qpp_hist_more.fig');
+% saveas(f,'/Users/owner/Desktop/imp_qpp_hist_more.png');
+
+all2=hist(curly_I,edges2);
+part2=hist(imp_qpp_notnan,edges2);
+noqpppart2=hist(imp_noqpp,edges2);
+frac2 = part2./all2;
+noqppfrac2 = noqpppart2./all2;
+fracrel2 = part2/sum(part2);
+noqpprel2 = noqpppart2/sum(noqpppart2);
 
 %conduct two-sample K-S test to compare the sample with QPPs to the sample
 %without QPPs
