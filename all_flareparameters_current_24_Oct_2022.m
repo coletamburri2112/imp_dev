@@ -27,10 +27,10 @@ starti=100000; %initialize to something outside range
 %load the file sdoeve304, which containts the data for the 304A line as
 %recorded by SDO/EVE for the extent of the MEGS-B experiment, between 2010
 %and 2014
-filename=['/Users/owner/Desktop/Oct_2022_Imp/sdo_eve_arr.mat'];
+filename=['/Users/owner/Desktop/CU_Research/sdoeve304_2.mat'];
 load(filename);
 %mkdir('/Users/owner/Desktop/fake/');
-ribbondb_info = readtable(['/Users/owner/Desktop/Oct_2022_Imp/ribbondb_v1.0.csv']);
+ribbondb_info = readtable(['/Users/owner/Desktop/Oct_2022_Imp/imp_dev/ribbondb_v1.0.csv']);
 %initialize arrays
 starttimes=NaN(2049,1);
 endtimes=NaN(2049,1);
@@ -730,262 +730,261 @@ for i=1:2049
               %fit is poorly conditioned if datetime values used - switched to
                 %length
                 %[rise_fit_obj_hr,gof_3_hr] = fit(risehr,risehr_t,'poly3');
-    %             if length(risehr_t) > 3 && length(decayhr_t) > 3
-    %                 [rise_fit_obj_exp1_hr,gof_exp1_hr] = fit((1:length(risehr_t))',risehr,'exp1');
-    %                 [rise_fit_obj_exp2_hr,gof_exp2_hr] = fit((1:length(risehr_t))',risehr,'exp2');
-    % 
-    %                 n_coeff(1) = length(coeffvalues(rise_fit_obj_exp1_hr));
-    %                 n_coeff(2) = length(coeffvalues(rise_fit_obj_exp2_hr));
-    % 
-    % 
-    %                 rise_fit_exp2_hr = feval(rise_fit_obj_exp2_hr,(1:length(risehr_t))');
-    %                 %rise_fit3_hr = feval(rise_fit_obj_hr,risehr);
-    %                 rise_fit_exp1_hr = feval(rise_fit_obj_exp1_hr,(1:length(risehr_t))');
-    % 
-    %                 [decay_fit_obj_pwr1_hr,gofdecpwr1_hr] = fit(decayhr_t,decayhr,'power1');
-    %                 [decay_fit_obj_pwr2_hr,gofdecpwr2_hr] = fit(decayhr_t,decayhr,'power2');
-    %                 [decay_fit_obj_four4_hr,gofdec_four4_hr] = fit(decayhr_t,decayhr,'Fourier4');
-    %                 [decay_fit_obj_four3_hr,gofdec_four3_hr] = fit(decayhr_t,decayhr,'Fourier3');
-    %                 [decay_fit_obj_four2_hr,gofdec_four2_hr] = fit(decayhr_t,decayhr,'Fourier2');
-    %                 [decay_fit_obj_four1_hr,gofdec_four1_hr] = fit(decayhr_t,decayhr,'Fourier1');
-    % 
-    %                 n_coeff(3) = length(coeffvalues(decay_fit_obj_pwr1_hr));
-    %                 n_coeff(4) = length(coeffvalues(decay_fit_obj_pwr2_hr));
-    %                 n_coeff(5) = length(coeffvalues(decay_fit_obj_four1_hr));
-    %                 n_coeff(6) = length(coeffvalues(decay_fit_obj_four2_hr));
-    %                 n_coeff(7) = length(coeffvalues(decay_fit_obj_four3_hr));
-    %                 n_coeff(8) = length(coeffvalues(decay_fit_obj_four4_hr));
-    % 
-    %                 decay_fitpwr1= feval(decay_fit_obj_pwr1_hr,decayhr_t);
-    %                 decay_fitpwr2= feval(decay_fit_obj_pwr2_hr,decayhr_t);
-    %                 decay_fitfour1= feval(decay_fit_obj_four1_hr,decayhr_t);
-    %                 decay_fitfour2= feval(decay_fit_obj_four2_hr,decayhr_t);
-    %                 decay_fitfour3= feval(decay_fit_obj_four3_hr,decayhr_t);
-    %                 decay_fitfour4= feval(decay_fit_obj_four4_hr,decayhr_t);
-    % 
-    %                 fits{i,1}=rise_fit_obj_exp1_hr;
-    %                 fits{i,2}=rise_fit_obj_exp2_hr;
-    %                 fits{i,3}=decay_fit_obj_four1_hr;
-    %                 fits{i,4}=decay_fit_obj_four2_hr;
-    %                 fits{i,5}=decay_fit_obj_four3_hr;
-    %                 fits{i,6}=decay_fit_obj_four3_hr;
-    % 
-    %                 spl_riset = windowthr(1:maxind1)';
-    %                 spl_rise = spl(1:maxind1)';
-    %                 spl_decay = spl((maxind1)+1:length(spl))';
-    %                 err_rise = errorbars(1:maxind1);
-    %                 err_decay = errorbars(maxind1+1:length(spl));
-    %                 riser2arr_exp2 = corrcoef(spl_rise,rise_fit_exp2_hr);
-    %                 riser2arr_exp1 = corrcoef(spl_rise,rise_fit_exp1_hr);
-    %                 %rise_3_r2arr = corrcoef(spl_riset,rise_fit3_hr);
-    %                 decay_four2_r2arr = corrcoef(spl_decay,decay_fitfour2);
-    % 
-    %                 rise_exp2_r2 = riser2arr_exp2(1,2);
-    %                 rise_exp1_r2 = riser2arr_exp1(1,2);
-    %                 %rise_3_r2 = rise_3_r2arr(1,2);
-    %                 decay_four2_r2 = decay_four2_r2arr(1,2);
-    % 
-    %                 adjrsq=[gof_exp1_hr.adjrsquare,gof_exp2_hr.adjrsquare,gofdecpwr1_hr.adjrsquare,gofdecpwr2_hr.adjrsquare,gofdec_four1_hr.adjrsquare,...
-    %                     gofdec_four2_hr.adjrsquare,gofdec_four3_hr.adjrsquare,gofdec_four4_hr.adjrsquare];
-    % 
-    %                 %possible error performance
-    %                 errstr={'mae','mse','rmse','mare','msre','rmsre','mape','mspe','rmspe'};
-    %                 errstrwr2={'mae','mse','rmse','mare','msre','rmsre','mape','mspe','rmspe','r2','adjr2'};
-    %                 decaymods=[decay_fitpwr1,decay_fitpwr2,...
-    %                     decay_fitfour1,decay_fitfour2,decay_fitfour3,decay_fitfour4];
-    %                 %%error performance metrics
-    %                 errtab = NaN(8,length(errstr)+2);
-    %                 chisqs = NaN(8,4);
-    % 
-    %                 %vetting by comparison of models - flag of 0 if we have
-    %                 %issues
-    %                 if ~isempty(fits{i,4}) && length(decay_fitfour2) > 50
-    %                     if decay_fitfour2(52)>decay_fitfour2(51) && decay_fitfour2(53)>decay_fitfour2(52) && decay_fitfour2(54)>decay_fitfour2(53) && decay_fitfour2(55)>decay_fitfour2(54) && decay_fitfour2(2)>decay_fitfour2(1) && decay_fitfour2(3)>decay_fitfour2(2) && decay_fitfour2(4)>decay_fitfour2(3) && decay_fitfour2(5)>decay_fitfour2(4)
-    %                         flags{i} = ribbondb_info{i,2};
-    %                     end
-    %                 end
-    % 
-    %                 if ~isempty(fits{i,4})
-    %                     if decay_fitfour2(1)-min(rise_fit_exp2_hr) < 0.6*(max(rise_fit_exp2_hr)-min(rise_fit_exp2_hr))
-    %                         flags{i} = ribbondb_info{i,2};
-    %                     end
-    %                 end
-    % 
-    %                 if ~isempty(fits{i,4})
-    %                     if 0.3*(max(decay_fitfour2)-min(decay_fitfour2)) > (max(rise_fit_exp2_hr)-min(rise_fit_exp2_hr))
-    %                         flags{i} = ribbondb_info{i,2};
-    %                     end
-    %                 end
-    % 
-    %                 for u=1:8 %all decay models and all rise models
-    %                     for m=1:length(errstr)
-    %                         if u == 1
-    %                             met = errperf(spl_rise,rise_fit_exp1_hr,errstr{m});
-    %                         elseif u == 2
-    %                             met = errperf(spl_rise,rise_fit_exp2_hr,errstr{m});
-    %                         elseif u > 2
-    %                             met = errperf(spl_decay,decaymods(:,u-2),errstr{m});
-    %                         end
-    %                         errtab(u,m) = met;
-    %                     end
-    %                     m=10;
-    % 
-    %                     if u == 1
-    %                         cc = corrcoef(spl_rise,rise_fit_exp1_hr');   
-    %                     elseif u == 2
-    %                         cc = corrcoef(spl_rise,rise_fit_exp2_hr');
-    %                     elseif u > 2
-    %                         cc = corrcoef(spl_decay,decaymods(:,u-2));
-    %                     end
-    %                     errtab(u,m) = cc(1,2);                    
-    % 
-    %                     if u == 1
-    %                         resid = spl_rise-rise_fit_exp1_hr;
-    %                         stand_dev = nanstd(resid);
-    %                         chisq = 0;
-    %                         %option 3 using errorbars from sdo/eve file - see other
-    %                         %options in original file
-    %                         for t=1:length(resid)
-    %                             chi=(resid(t)/riseerr(t))^2;
-    %                             chisq=chisq+chi;
-    %                         end
-    %                         df = length(spl_riset)-n_coeff(u);
-    %                         redchisq1 = chisq/df;
-    %                         %option 4 using errorbars from sdo/eve file but using the
-    %                         %equation from formula
-    %                         redchisq2=chi_squared(spl_rise,rise_fit_exp1_hr,n_coeff(u),riseerr);
-    %                     elseif u == 2
-    %                         resid = spl_rise - rise_fit_exp2_hr;
-    %                         stand_dev = nanstd(resid);
-    %                         chisq=0;
-    %                         %option 3 using errorbars from file
-    %                         for t=1:length(resid)
-    %                             chi=(resid(t)/riseerr(t))^2;
-    %                             chisq=chisq+chi;
-    %                         end
-    %                          %option 4 using errorbars from sdo/eve file but using the
-    %                         %equation from formula
-    %                         redchisq2=chi_squared(spl_rise,rise_fit_exp2_hr,n_coeff(u),riseerr);
-    %                         df = length(spl_rise)-n_coeff(u);
-    %                         redchisq1 = chisq/df;
-    %                     elseif u > 2
-    % 
-    %                         resid = spl_decay - decaymods(:,u-2);
-    %                             stand_dev = nanstd(resid);
-    %                         for h=1:length(spl_decay)
-    %                             sqerrstd3(h) = sqerr;
-    %                         end
-    %                         chisq=0;
-    %                         for t=1:length(resid)
-    %                             chi=(resid(t)/decayerr(t))^2;
-    %                             chisq=chisq+chi;
-    %                         end
-    %                         df = length(spl_decay)-n_coeff(u-2);
-    %                         redchisq1 = chisq/df;
-    %                          %option 4 using errorbars from sdo/eve file but using the
-    %                         %equation from formula
-    %                         redchisq2=chi_squared(spl_decay,decaymods(:,u-2),n_coeff(u),decayerr');
-    %                     end
-    %                     chisqs(u,1) = chisq;
-    %                     chisqs(u,2) = redchisq1;
-    %                     chisqs(u,3) = redchisq2;
-    %                 end
-    %                 errtab(:,11) = adjrsq;
-    %                 errtable = array2table(errtab,'VariableNames',errstrwr2,'RowNames',{'RiseExp1','RiseExp2','DecayPwr1','DecayPwr2','DecayFour1','DecayFour2','DecayFour3','DecayFour4'});
-    % 
-    %                 errs{i}=errtable;
-    %                 chisquareds{i+1} = chisqs;
-    % 
-    %                 modresid_rise_exp2 = spl_rise - rise_fit_exp2_hr;
-    %                 modresid_rise_exp1 = spl_rise - rise_fit_exp1_hr;
-    %                 modresid_decay = spl_decay - decay_fitfour2;
-    %                 mkdir('/Users/owner/Desktop/modeleval');
-    % 
-    %                 rsqurs_exp2_four2(i,1) = rise_exp2_r2;
-    %                 rsqurs_exp2_four2(i,2) = decay_four2_r2;
-    %                 rsqurs_3_four2(i,1) = rise_exp2_r2;
-    %                 rsqurs_3_four2(i,2) = decay_four2_r2;
-    %             else
-    %                 flags{i}='1' %if the fit was too short on either side
-    %             end
+                if length(risehr_t) > 3 && length(decayhr_t) > 3
+                    [rise_fit_obj_exp1_hr,gof_exp1_hr] = fit((1:length(risehr_t))',risehr,'exp1');
+                    [rise_fit_obj_exp2_hr,gof_exp2_hr] = fit((1:length(risehr_t))',risehr,'exp2');
+    
+                    n_coeff(1) = length(coeffvalues(rise_fit_obj_exp1_hr));
+                    n_coeff(2) = length(coeffvalues(rise_fit_obj_exp2_hr));
+    
+    
+                    rise_fit_exp2_hr = feval(rise_fit_obj_exp2_hr,(1:length(risehr_t))');
+                    %rise_fit3_hr = feval(rise_fit_obj_hr,risehr);
+                    rise_fit_exp1_hr = feval(rise_fit_obj_exp1_hr,(1:length(risehr_t))');
+    
+                    [decay_fit_obj_pwr1_hr,gofdecpwr1_hr] = fit(decayhr_t,decayhr,'power1');
+                    [decay_fit_obj_pwr2_hr,gofdecpwr2_hr] = fit(decayhr_t,decayhr,'power2');
+                    [decay_fit_obj_four4_hr,gofdec_four4_hr] = fit(decayhr_t,decayhr,'Fourier4');
+                    [decay_fit_obj_four3_hr,gofdec_four3_hr] = fit(decayhr_t,decayhr,'Fourier3');
+                    [decay_fit_obj_four2_hr,gofdec_four2_hr] = fit(decayhr_t,decayhr,'Fourier2');
+                    [decay_fit_obj_four1_hr,gofdec_four1_hr] = fit(decayhr_t,decayhr,'Fourier1');
+    
+                    n_coeff(3) = length(coeffvalues(decay_fit_obj_pwr1_hr));
+                    n_coeff(4) = length(coeffvalues(decay_fit_obj_pwr2_hr));
+                    n_coeff(5) = length(coeffvalues(decay_fit_obj_four1_hr));
+                    n_coeff(6) = length(coeffvalues(decay_fit_obj_four2_hr));
+                    n_coeff(7) = length(coeffvalues(decay_fit_obj_four3_hr));
+                    n_coeff(8) = length(coeffvalues(decay_fit_obj_four4_hr));
+    
+                    decay_fitpwr1= feval(decay_fit_obj_pwr1_hr,decayhr_t);
+                    decay_fitpwr2= feval(decay_fit_obj_pwr2_hr,decayhr_t);
+                    decay_fitfour1= feval(decay_fit_obj_four1_hr,decayhr_t);
+                    decay_fitfour2= feval(decay_fit_obj_four2_hr,decayhr_t);
+                    decay_fitfour3= feval(decay_fit_obj_four3_hr,decayhr_t);
+                    decay_fitfour4= feval(decay_fit_obj_four4_hr,decayhr_t);
+    
+                    fits{i,1}=rise_fit_obj_exp1_hr;
+                    fits{i,2}=rise_fit_obj_exp2_hr;
+                    fits{i,3}=decay_fit_obj_four1_hr;
+                    fits{i,4}=decay_fit_obj_four2_hr;
+                    fits{i,5}=decay_fit_obj_four3_hr;
+                    fits{i,6}=decay_fit_obj_four3_hr;
+    
+                    spl_riset = windowthr(1:maxind1)';
+                    spl_rise = spl(1:maxind1)';
+                    spl_decay = spl((maxind1)+1:length(spl))';
+                    err_rise = errorbars(1:maxind1);
+                    err_decay = errorbars(maxind1+1:length(spl));
+                    riser2arr_exp2 = corrcoef(spl_rise,rise_fit_exp2_hr);
+                    riser2arr_exp1 = corrcoef(spl_rise,rise_fit_exp1_hr);
+                    %rise_3_r2arr = corrcoef(spl_riset,rise_fit3_hr);
+                    decay_four2_r2arr = corrcoef(spl_decay,decay_fitfour2);
+    
+                    rise_exp2_r2 = riser2arr_exp2(1,2);
+                    rise_exp1_r2 = riser2arr_exp1(1,2);
+                    %rise_3_r2 = rise_3_r2arr(1,2);
+                    decay_four2_r2 = decay_four2_r2arr(1,2);
+    
+                    adjrsq=[gof_exp1_hr.adjrsquare,gof_exp2_hr.adjrsquare,gofdecpwr1_hr.adjrsquare,gofdecpwr2_hr.adjrsquare,gofdec_four1_hr.adjrsquare,...
+                        gofdec_four2_hr.adjrsquare,gofdec_four3_hr.adjrsquare,gofdec_four4_hr.adjrsquare];
+    
+                    %possible error performance
+                    errstr={'mae','mse','rmse','mare','msre','rmsre','mape','mspe','rmspe'};
+                    errstrwr2={'mae','mse','rmse','mare','msre','rmsre','mape','mspe','rmspe','r2','adjr2'};
+                    decaymods=[decay_fitpwr1,decay_fitpwr2,...
+                        decay_fitfour1,decay_fitfour2,decay_fitfour3,decay_fitfour4];
+                    %%error performance metrics
+                    errtab = NaN(8,length(errstr)+2);
+                    chisqs = NaN(8,4);
+    
+                    %vetting by comparison of models - flag of 0 if we have
+                    %issues
+                    if ~isempty(fits{i,4}) && length(decay_fitfour2) > 50
+                        if decay_fitfour2(52)>decay_fitfour2(51) && decay_fitfour2(53)>decay_fitfour2(52) && decay_fitfour2(54)>decay_fitfour2(53) && decay_fitfour2(55)>decay_fitfour2(54) && decay_fitfour2(2)>decay_fitfour2(1) && decay_fitfour2(3)>decay_fitfour2(2) && decay_fitfour2(4)>decay_fitfour2(3) && decay_fitfour2(5)>decay_fitfour2(4)
+                            flags{i} = ribbondb_info{i,2};
+                        end
+                    end
+    
+                    if ~isempty(fits{i,4})
+                        if decay_fitfour2(1)-min(rise_fit_exp2_hr) < 0.6*(max(rise_fit_exp2_hr)-min(rise_fit_exp2_hr))
+                            flags{i} = ribbondb_info{i,2};
+                        end
+                    end
+    
+                    if ~isempty(fits{i,4})
+                        if 0.3*(max(decay_fitfour2)-min(decay_fitfour2)) > (max(rise_fit_exp2_hr)-min(rise_fit_exp2_hr))
+                            flags{i} = ribbondb_info{i,2};
+                        end
+                    end
+    
+                    for u=1:8 %all decay models and all rise models
+                        for m=1:length(errstr)
+                            if u == 1
+                                met = errperf(spl_rise,rise_fit_exp1_hr,errstr{m});
+                            elseif u == 2
+                                met = errperf(spl_rise,rise_fit_exp2_hr,errstr{m});
+                            elseif u > 2
+                                met = errperf(spl_decay,decaymods(:,u-2),errstr{m});
+                            end
+                            errtab(u,m) = met;
+                        end
+                        m=10;
+    
+                        if u == 1
+                            cc = corrcoef(spl_rise,rise_fit_exp1_hr');   
+                        elseif u == 2
+                            cc = corrcoef(spl_rise,rise_fit_exp2_hr');
+                        elseif u > 2
+                            cc = corrcoef(spl_decay,decaymods(:,u-2));
+                        end
+                        errtab(u,m) = cc(1,2);                    
+    
+%                         if u == 1
+%                             resid = spl_rise-rise_fit_exp1_hr;
+%                             stand_dev = nanstd(resid);
+%                             chisq = 0;
+%                             %option 3 using errorbars from sdo/eve file - see other
+%                             %options in original file
+%                             for t=1:length(resid)
+%                                 chi=(resid(t)/riseerr(t))^2;
+%                                 chisq=chisq+chi;
+%                             end
+%                             df = length(spl_riset)-n_coeff(u);
+%                             redchisq1 = chisq/df;
+%                             %option 4 using errorbars from sdo/eve file but using the
+%                             %equation from formula
+%                             redchisq2=chi_squared(spl_rise,rise_fit_exp1_hr,n_coeff(u),riseerr);
+%                         elseif u == 2
+%                             resid = spl_rise - rise_fit_exp2_hr;
+%                             stand_dev = nanstd(resid);
+%                             chisq=0;
+%                             %option 3 using errorbars from file
+%                             for t=1:length(resid)
+%                                 chi=(resid(t)/riseerr(t))^2;
+%                                 chisq=chisq+chi;
+%                             end
+%                              %option 4 using errorbars from sdo/eve file but using the
+%                             %equation from formula
+%                             redchisq2=chi_squared(spl_rise,rise_fit_exp2_hr,n_coeff(u),riseerr);
+%                             df = length(spl_rise)-n_coeff(u);
+%                             redchisq1 = chisq/df;
+%                         elseif u > 2
+%     
+%                             resid = spl_decay - decaymods(:,u-2);
+%                                 stand_dev = nanstd(resid);
+%                             for h=1:length(spl_decay)
+%                                 sqerrstd3(h) = sqerr;
+%                             end
+%                             chisq=0;
+%                             for t=1:length(resid)
+%                                 chi=(resid(t)/decayerr(t))^2;
+%                                 chisq=chisq+chi;
+%                             end
+%                             df = length(spl_decay)-n_coeff(u-2);
+%                             redchisq1 = chisq/df;
+%                              %option 4 using errorbars from sdo/eve file but using the
+%                             %equation from formula
+%                             redchisq2=chi_squared(spl_decay,decaymods(:,u-2),n_coeff(u),decayerr');
+%                         end
+%                         chisqs(u,1) = chisq;
+%                         chisqs(u,2) = redchisq1;
+%                         chisqs(u,3) = redchisq2;
+                    end
+                    errtab(:,11) = adjrsq;
+                    errtable = array2table(errtab,'VariableNames',errstrwr2,'RowNames',{'RiseExp1','RiseExp2','DecayPwr1','DecayPwr2','DecayFour1','DecayFour2','DecayFour3','DecayFour4'});
+    
+                    errs{i}=errtable;
+                    chisquareds{i+1} = chisqs;
+    
+                    modresid_rise_exp2 = spl_rise - rise_fit_exp2_hr;
+                    modresid_rise_exp1 = spl_rise - rise_fit_exp1_hr;
+                    modresid_decay = spl_decay - decay_fitfour2;
+                    mkdir('/Users/owner/Desktop/modeleval');
+    
+                    rsqurs_exp2_four2(i,1) = rise_exp2_r2;
+                    rsqurs_exp2_four2(i,2) = decay_four2_r2;
+                    
+                else
+                    flags{i}='1' %if the fit was too short on either side
+                end
             end
                 
         end
         
-    %     flid = char(ribbondb_info{i,2});
-    %     fltitle = flid(1:8);
+        flid = char(ribbondb_info{i,2});
+        fltitle = flid(1:8);
         
     
-        %plotting - indices leave something to be desired
-    %     if maxind(1) > 1 && strcmp(flags{i},'1') == 0
-    %             
-    %             figin = ceil(i/25);
-    %             figfl = floor(i/26);
-    %             figure(1)
-    %             a=subplot(5,5,i-25*(figin-1))
-    %             scatter(windowthr,smspl'/(1e-3),'r','.');
-    %             hold on
-    %             scatter(risehr_t,rise_fit_exp2_hr/(1e-3),'.');
-    %             scatter(decayhr_t,decay_fitfour2/(1e-3),'.');
-    %             title([fltitle ' [' num2str(curly_Is(i)) ']'],'Interpreter','None');
-    %           
-    %             flags{i} ='0'; %%% WHY THIS LINE?
-    %     
-    % 
-    %     elseif maxind(1) ~= 1 && strcmp(flags{i},'1') == 0
-    %             
-    %             figin = ceil(i/25);
-    %             figfl = floor(i/26);
-    %             figure(1)
-    %             subplot(5,5,i-25*(figin-1))
-    %             cla(f)
-    %             scatter(timeev,irrev/(1e-3),'r','.');
-    % 
-    %             title(fltitle,'Interpreter', 'none');
-    %      
-    %     
-    %     elseif strcmp(flags{i},'1') == 1
-    %         
-    %         figin = ceil(i/25);
-    %         figfl = floor(i/26);
-    %         f=figure(1)
-    %         subplot(5,5,i-25*(figin-1))
-    %         cla(f)
-    %         scatter(timeev,zeros(length(timeev),1),'r','.');
-    %   
-    %          title(fltitle,'Interpreter', 'none');
-    %         
-    %    
-    %     end
-    %     
-    %     else
-    %         
-    %         figin = ceil(i/25);
-    %         figfl = floor(i/26);
-    %         f=figure(1)
-    %         subplot(5,5,i-25*(figin-1))
-    %         cla(f)
-    %         scatter(timeev,zeros(length(timeev),1),'r','.');
-    %   
-    %          %title(fltitle,'Interpreter', 'none');
-    %         
-    %     
-    %         
-    %     end
-    %     if i-25*(figin-1) == 1
-    %         subplot(5,5,i-25*(figin-1));
-    %         xlabel('Datetime');
-    %         ylabel('Flux (mW/m^2)');
-    %     end
-    %     %if rem(i,length(i))==0
-    %         sgtitle('Format: YYYYMMDD_(starttime) [impulsivity]','Interpreter','none');
-    %     %end
-    %     if rem(i,25) == 0 || i == length(windowstart2)
-    %         saveas(f,['/Users/owner/Desktop/flaresummary_ver/flares',num2str(i-24),'to',num2str(i),'.png']);
-    %         f=figure(1);
-    %         clf
-    %         set(gcf,'Position',[100 100 1500 1500])
-    %    end
+%         plotting - indices leave something to be desired
+%         if maxind(1) > 1 && strcmp(flags{i},'1') == 0
+%                 
+%                 figin = ceil(i/25);
+%                 figfl = floor(i/26);
+%                 figure(1)
+%                 a=subplot(5,5,i-25*(figin-1))
+%                 scatter(windowthr,smspl'/(1e-3),'r','.');
+%                 hold on
+%                 scatter(risehr_t,rise_fit_exp2_hr/(1e-3),'.');
+%                 scatter(decayhr_t,decay_fitfour2/(1e-3),'.');
+%                 title([fltitle ' [' num2str(curly_Is(i)) ']'],'Interpreter','None');
+%               
+%                 flags{i} ='0'; %%% WHY THIS LINE?
+%         
+%     
+%         elseif maxind(1) ~= 1 && strcmp(flags{i},'1') == 0
+%                 
+%                 figin = ceil(i/25);
+%                 figfl = floor(i/26);
+%                 figure(1)
+%                 subplot(5,5,i-25*(figin-1))
+%                 cla(f)
+%                 scatter(timeev,irrev/(1e-3),'r','.');
+%     
+%                 title(fltitle,'Interpreter', 'none');
+%          
+%         
+%         elseif strcmp(flags{i},'1') == 1
+%             
+%             figin = ceil(i/25);
+%             figfl = floor(i/26);
+%             f=figure(1)
+%             subplot(5,5,i-25*(figin-1))
+%             cla(f)
+%             scatter(timeev,zeros(length(timeev),1),'r','.');
+%       
+%              title(fltitle,'Interpreter', 'none');
+%             
+%        
+%         end
+%         
+%         else
+%             
+%             figin = ceil(i/25);
+%             figfl = floor(i/26);
+%             f=figure(1)
+%             subplot(5,5,i-25*(figin-1))
+%             cla(f)
+%             scatter(timeev,zeros(length(timeev),1),'r','.');
+%       
+%              %title(fltitle,'Interpreter', 'none');
+%             
+%         
+%             
+%         end
+%         if i-25*(figin-1) == 1
+%             subplot(5,5,i-25*(figin-1));
+%             xlabel('Datetime');
+%             ylabel('Flux (mW/m^2)');
+%         end
+%         %if rem(i,length(i))==0
+%             sgtitle('Format: YYYYMMDD_(starttime) [impulsivity]','Interpreter','none');
+%         %end
+%         if rem(i,25) == 0 || i == length(windowstart2)
+%             saveas(f,['/Users/owner/Desktop/flaresummary_ver/flares',num2str(i-24),'to',num2str(i),'.png']);
+%             f=figure(1);
+%             clf
+%             set(gcf,'Position',[100 100 1500 1500])
+%        end
     
          
 end

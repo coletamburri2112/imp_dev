@@ -23,14 +23,14 @@
 
 %clear workspace
  clear;
-filename='/Users/owner/Desktop/Oct_2022_Imp/sdoeve304_2.mat';
-ribbondb_info = readtable('/Users/owner/Desktop/Oct_2022_Imp/ribbondb_v1.0.csv');
-filename2='/Users/owner/Desktop/Oct_2022_Imp/bestperf_more.mat';
+filename='/Users/owner/Desktop/CU_Research/sdoeve304_2.mat';
+ribbondb_info = readtable('/Users/owner/Desktop/Oct_2022_Imp/imp_dev/ribbondb_v1.0.csv');
+filename2='/Users/owner/Desktop/Oct_2022_Imp/imp_dev/all_and_best_Oct_2022.mat';
 load(filename)
 load(filename2)
 
 mkdir('/Users/owner/Desktop/bestflares/')
-is = best_more;
+is = bestsorted;
 l=1;
 
 set(gcf,'Position',[100 100 1500 1500])
@@ -576,6 +576,7 @@ for i=1:2049
         starttimes_corr(t,2)=i;
         endtimes_corr(t,2)=i;
         maxtimes_corr(t,2)=i;
+        
 
     
     %%%%%END ORIGINAL MODEL-BUILDING%%%%%
