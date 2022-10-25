@@ -6,7 +6,7 @@ imp_data = load(imp_file,'curly_Is_best','curly_Is','curly_Is_relative',...
     'starttimes_corr','maxtimes_corr','endtimes_corr', ...
     'bestflaresname');
 
-rec_data = restore_idl('/Users/owner/Desktop/CU_Research/rec_comp_4May/recratesidl.sav');
+rec_data = restore_idl('/Users/owner/Desktop/Oct_2022_Imp/imp_dev/recratesidl.sav');
 
 flarenames = imp_data.bestflaresname;
 pat1 = ["C"]; 
@@ -18,7 +18,7 @@ pat_in1 = contains(flarenames,pat1);
 pat_in2 = contains(flarenames,pat2);
 pat_in3 = contains(flarenames,pat3);
 
-%imp_ind = imp_data.curly_Is_best_more;
+
 imp_ind = imp_data.curly_Is_relative_best;
 imp_start = imp_data.starttimes_corr;
 imp_peak = imp_data.maxtimes_corr;
@@ -81,25 +81,25 @@ recmax_low3 = recmaximp(pat_in3,:);
 % saveas(m,'/Users/owner/Desktop/rec_comp_4May/maxreccomp.fig');
 % saveas(m,'/Users/owner/Desktop/rec_comp_4May/maxreccomp.png');
 % 
-%comparison to max rec rate during impulsive phase
-% %all flares
+%comparison to max rec rate overall
+%all flares
 % l=figure(5)
 % clf
 % colormap cool
 % %subplot(2,1,1)
 % set(gcf,'Position',[300 300 550 550])
-% idx = isfinite(recmaximp(:,1)) & isfinite(curly_I);
-% fitted0 = fit(recmaximp(idx,1)/1e18,log(curly_I(idx)*60),'m*x+b'); 
+% idx = isfinite(recmax(:,1)) & isfinite(curly_I);
+% fitted0 = fit(recmax(idx,1)/1e18,curly_I(idx),'m*x+b'); 
 % k=plot(fitted0,'red');
 % hold on
 % set(k,'LineWidth',2)
-% scatter(recmaximp(:,1)/1e18,log(curly_I*60),200,log(curly_I*60),'.');
+% scatter(recmax(:,1)/1e18,curly_I,200,curly_I,'.');
 % grid on
 % xlabel('Reconnection Rate [$$10^{18} Mx/s$$]','fontsize',15,'interpreter','latex')
 % ylabel('Impulsiveness Index [$$ln(min^{-1})$$]','fontsize',15,'interpreter','latex')
 % xlim([0 35])
 % legend off
-% title('$$i$$ vs. Reconnection Rate, $$r^2 = 0.045$$','fontsize',25,'interpreter','latex')
+% title('$$i$$ vs. Reconnection Rate, $$r^2 = 0.029$$','fontsize',25,'interpreter','latex')
 
 % 
 % % pbaspect([1 1 1])
@@ -302,32 +302,32 @@ end
 % saveas(n,'/Users/owner/Desktop/Research/MAT_SOURCE/impcomp/posnegrecrate_c_and_m.png');
 
 % % % % QPP PERIOD AND I
-% n=figure(1);
-% clf
-% colormap cool
-% set(gcf,'Position',[300 300 500 500])
-% idx2 = (log(qpp_peron) > 4.5);
-% qpp_peron(idx2)
-% qpp_peron(idx2) = NaN;
-% scatter(log(qpp_peron/60),log(curly_I*60),200,log(curly_I*60),'.');
-% idx = isfinite(curly_I) & isfinite(qpp_peron);
-% fitted2 = fit(log(qpp_peron(idx)/60),log(curly_I(idx)*60),'m*x+b'); 
-% 
-% 
-% 
-% 
-% 
-% title('$$i$$ vs. QPP Period ($$r^2 = 0.288$$)','FontSize',22,'interpreter','latex');
-% hold on
-% p=plot(fitted2,'red');
-% set(p,'LineWidth',2)
-% ylabel('Impulsiveness Index [$$ln(min^{-1})$$]','fontsize',15,'interpreter','latex');
-% xlabel('QPP Period [ln(min)]','fontsize',15,'interpreter','latex');
-% dim = [.6 .55 .3 .3];
-% str = {['m = ',num2str(fitted2.m)],['b = ',num2str(fitted2.b)],['r^2 = 0.288']};
-% %annotation('textbox',dim,'String',str,'FitBoxToText','on','fontsize',14);
-% grid on
-% legend off
+n=figure(1);
+clf
+colormap cool
+set(gcf,'Position',[300 300 500 500])
+idx2 = (log(qpp_peron) > 4.5);
+qpp_peron(idx2)
+qpp_peron(idx2) = NaN;
+scatter(log(qpp_peron/60),curly_I,200,curly_I,'.');
+idx = isfinite(curly_I) & isfinite(qpp_peron);
+fitted2 = fit(log(qpp_peron(idx)/60),curly_I(idx),'m*x+b'); 
+
+
+
+
+
+title('$$i$$ vs. QPP Period ($$r^2 = 0.225$$)','FontSize',22,'interpreter','latex');
+hold on
+p=plot(fitted2,'red');
+set(p,'LineWidth',2)
+ylabel('Impulsiveness Index [$$ln(min^{-1})$$]','fontsize',15,'interpreter','latex');
+xlabel('QPP Period [ln(min)]','fontsize',15,'interpreter','latex');
+dim = [.6 .55 .3 .3];
+str = {['m = ',num2str(fitted2.m)],['b = ',num2str(fitted2.b)],['r^2 = 0.225']};
+%annotation('textbox',dim,'String',str,'FitBoxToText','on','fontsize',14);
+grid on
+legend off
 % pbaspect([1 1 1])
 
 
@@ -338,100 +338,100 @@ end
 
 %incidence of QPP period with impulsiveness, using all flares for bins
 %high res bins
-numbin=150;
-
-
-edges = min(curly_I_all):((max(curly_I_all))-min(curly_I_all))/numbin:max(curly_I_all);
-
-
-notnan = ~isnan(qpp_peron);
-inan = isnan(qpp_peron);
-imp_qpp_notnan=curly_I;
-
-for i=1:500
-    if inan(i)==1
-        0
-        imp_qpp_notnan(i)=NaN
-    end
-end
-
-imp_noqpp = curly_I(inan);
-
-m=figure(2);
-clf
-set(gca,'yscale','log')
-set(gcf,'Position',[300 300 800 500]);
-g=histogram(curly_I,'binedges',edges,'facecolor','magenta','facealpha',1);
-%xlim([-2.5 2.5])
-hold on
-
-h=histogram(imp_qpp_notnan,numbin,'binedges',edges,'facecolor','blue','facealpha',1);
-legend('All Events','Events with QPPs','fontsize',20,'interpreter','latex')
-grid on;
-xlabel('Impulsiveness [$$ln(min^{-1})$$]','fontsize',20,'interpreter','latex');
-ylabel('Count','fontsize',25,'interpreter','latex');
-
-%set(gca,'fontsize',15)
-title('Incidence of QPPs in Impulsiveness Distribution, High Res Bins','fontsize',25,'interpreter','latex');
-
-% saveas(f,'/Users/owner/Desktop/imp_qpp_hist_more.fig');
-% saveas(f,'/Users/owner/Desktop/imp_qpp_hist_more.png');
-
-all=hist(curly_I,edges);
-part=hist(imp_qpp_notnan,edges);
-noqpppart=hist(imp_noqpp,edges);
-frac = part./all;
-noqppfrac = noqpppart./all;
-fracrel = part/sum(part);
-noqpprel = noqpppart/sum(noqpppart);
-
-%low res bins
-numbin=14;
-
-
-edges2 = min(curly_I_all):((max(curly_I_all))-min(curly_I_all))/numbin:max(curly_I_all);
-
-
-notnan = ~isnan(qpp_peron);
-inan = isnan(qpp_peron);
-imp_qpp_notnan=curly_I;
-
-for i=1:500
-    if inan(i)==1
-        0
-        imp_qpp_notnan(i)=NaN
-    end
-end
-
-imp_noqpp = curly_I(inan);
-
-m=figure(3);
-clf
-set(gca,'yscale','log')
-set(gcf,'Position',[300 300 800 500]);
-g2=histogram(curly_I,'binedges',edges2,'facecolor','magenta','facealpha',1);
-%xlim([-2.5 2.5])
-hold on
-
-h2=histogram(imp_qpp_notnan,numbin,'binedges',edges2,'facecolor','blue','facealpha',1);
-legend('All Events','Events with QPPs','fontsize',20,'interpreter','latex')
-grid on;
-xlabel('Impulsiveness [$$ln(min^{-1})$$]','fontsize',20,'interpreter','latex');
-ylabel('Count','fontsize',25,'interpreter','latex');
-
-%set(gca,'fontsize',15)
-title('Incidence of QPPs in Impulsiveness Distribution, Low Res Bins','fontsize',25,'interpreter','latex');
-
-% saveas(f,'/Users/owner/Desktop/imp_qpp_hist_more.fig');
-% saveas(f,'/Users/owner/Desktop/imp_qpp_hist_more.png');
-
-all2=hist(curly_I,edges2);
-part2=hist(imp_qpp_notnan,edges2);
-noqpppart2=hist(imp_noqpp,edges2);
-frac2 = part2./all2;
-noqppfrac2 = noqpppart2./all2;
-fracrel2 = part2/sum(part2);
-noqpprel2 = noqpppart2/sum(noqpppart2);
+% numbin=150;
+% 
+% 
+% edges = min(curly_I_all):((max(curly_I_all))-min(curly_I_all))/numbin:max(curly_I_all);
+% 
+% 
+% notnan = ~isnan(qpp_peron);
+% inan = isnan(qpp_peron);
+% imp_qpp_notnan=curly_I;
+% 
+% for i=1:500
+%     if inan(i)==1
+%         0
+%         imp_qpp_notnan(i)=NaN
+%     end
+% end
+% 
+% imp_noqpp = curly_I(inan);
+% 
+% m=figure(2);
+% clf
+% set(gca,'yscale','log')
+% set(gcf,'Position',[300 300 800 500]);
+% g=histogram(curly_I,'binedges',edges,'facecolor','magenta','facealpha',1);
+% %xlim([-2.5 2.5])
+% hold on
+% 
+% h=histogram(imp_qpp_notnan,numbin,'binedges',edges,'facecolor','blue','facealpha',1);
+% legend('All Events','Events with QPPs','fontsize',20,'interpreter','latex')
+% grid on;
+% xlabel('Impulsiveness [$$ln(min^{-1})$$]','fontsize',20,'interpreter','latex');
+% ylabel('Count','fontsize',25,'interpreter','latex');
+% 
+% %set(gca,'fontsize',15)
+% title('Incidence of QPPs in Impulsiveness Distribution, High Res Bins','fontsize',25,'interpreter','latex');
+% 
+% % saveas(f,'/Users/owner/Desktop/imp_qpp_hist_more.fig');
+% % saveas(f,'/Users/owner/Desktop/imp_qpp_hist_more.png');
+% 
+% all=hist(curly_I,edges);
+% part=hist(imp_qpp_notnan,edges);
+% noqpppart=hist(imp_noqpp,edges);
+% frac = part./all;
+% noqppfrac = noqpppart./all;
+% fracrel = part/sum(part);
+% noqpprel = noqpppart/sum(noqpppart);
+% 
+% %low res bins
+% numbin=14;
+% 
+% 
+% edges2 = min(curly_I_all):((max(curly_I_all))-min(curly_I_all))/numbin:max(curly_I_all);
+% 
+% 
+% notnan = ~isnan(qpp_peron);
+% inan = isnan(qpp_peron);
+% imp_qpp_notnan=curly_I;
+% 
+% for i=1:500
+%     if inan(i)==1
+%         0
+%         imp_qpp_notnan(i)=NaN
+%     end
+% end
+% 
+% imp_noqpp = curly_I(inan);
+% 
+% m=figure(3);
+% clf
+% set(gca,'yscale','log')
+% set(gcf,'Position',[300 300 800 500]);
+% g2=histogram(curly_I,'binedges',edges2,'facecolor','magenta','facealpha',1);
+% %xlim([-2.5 2.5])
+% hold on
+% 
+% h2=histogram(imp_qpp_notnan,numbin,'binedges',edges2,'facecolor','blue','facealpha',1);
+% legend('All Events','Events with QPPs','fontsize',20,'interpreter','latex')
+% grid on;
+% xlabel('Impulsiveness [$$ln(min^{-1})$$]','fontsize',20,'interpreter','latex');
+% ylabel('Count','fontsize',25,'interpreter','latex');
+% 
+% %set(gca,'fontsize',15)
+% title('Incidence of QPPs in Impulsiveness Distribution','fontsize',25,'interpreter','latex');
+% xlim([-9 0])
+% % saveas(f,'/Users/owner/Desktop/imp_qpp_hist_more.fig');
+% % saveas(f,'/Users/owner/Desktop/imp_qpp_hist_more.png');
+% 
+% all2=hist(curly_I,edges2);
+% part2=hist(imp_qpp_notnan,edges2);
+% noqpppart2=hist(imp_noqpp,edges2);
+% frac2 = part2./all2;
+% noqppfrac2 = noqpppart2./all2;
+% fracrel2 = part2/sum(part2);
+% noqpprel2 = noqpppart2/sum(noqpppart2);
 
 %conduct two-sample K-S test to compare the sample with QPPs to the sample
 %without QPPs
@@ -489,10 +489,10 @@ noqpprel2 = noqpppart2/sum(noqpppart2);
 % clf
 % colormap cool
 % 
-% scatter(dec_dur_nonan/60,rise_dur_nonan/60,200,log(curly_I(idx)*1e6),'.');
-% ylabel('Rise Phase Duration [min]','fontsize',15)
-% xlabel('Decay Phase Duration [min]','fontsize',15)
-% title('Rise vs. Decay Phase Duration, r^2 = 0.088','fontsize',20)
+% scatter(dec_dur_nonan/60,rise_dur_nonan/60,200,curly_I(idx),'.');
+% ylabel('Rise Phase Duration [min]','fontsize',15,'interpreter','latex')
+% xlabel('Decay Phase Duration [min]','fontsize',15,'interpreter','latex')
+% title('Rise vs. Decay Phase Duration, $r^2 = 0.076$','fontsize',20,'interpreter','latex')
 % 
 % 
 % p = polyfit(dec_dur_nonan/60,rise_dur_nonan/60,1);
@@ -515,19 +515,19 @@ noqpprel2 = noqpppart2/sum(noqpppart2);
 % 
 % 
 % 
-% scatter(log(rise_dur/60),log(curly_I*60),200,log(curly_I*60),'.');
+% scatter(log(rise_dur/60),curly_I,200,curly_I,'.');
 % grid on
 % hold on
 % 
 % idx = isfinite(curly_I) & isfinite(rise_dur);
 % pbaspect([1 1 1])
-% fitted0 = fit(log(rise_dur(idx)/60),log(curly_I(idx)*60),'m*x+b'); 
+% fitted0 = fit(log(rise_dur(idx)/60),curly_I(idx),'m*x+b'); 
 % %k=plot(fitted0,'red');
 % %set(k,'LineWidth',2)
 % legend off
 % ylabel('Impulsiveness Index [$$ln(min^{-1})$$]','fontsize',14,'interpreter','latex');
 % xlabel('Rise Phase Duration [$$ln(min)$$]','fontsize',14,'interpreter','latex');
-% title(['$$i$$ vs. $$t_{rise}$$ ($$r^2 = 0.068$$)'],'FontSize',22,'interpreter','latex');
+% title(['$$i$$ vs. $$t_{rise}$$ ($$r^2 = 0.053$$)'],'FontSize',22,'interpreter','latex');
 % 
 % % dim = [.7 .55 .6 .6];
 % % % str = {['m = ',num2str(fitted0.m)],['b = ',num2str(fitted0.b)]};
@@ -542,7 +542,7 @@ noqpprel2 = noqpppart2/sum(noqpppart2);
 % colormap cool
 % subplot(1,3,2)
 % set(gcf,'Position',[300 300 1200 500])
-% scatter(log(dec_dur/60),log(curly_I*60),200,log(curly_I*60),'.');
+% scatter(log(dec_dur/60),curly_I,200,curly_I,'.');
 % grid on
 % hold on
 % pbaspect([1 1 1])
@@ -551,7 +551,7 @@ noqpprel2 = noqpppart2/sum(noqpppart2);
 % 
 % idx = isfinite(curly_I) & isfinite(dec_dur);
 % 
-% fitted1 = fit(log(dec_dur(idx)/60),log(curly_I(idx)*60),'m*x+b'); 
+% fitted1 = fit(log(dec_dur(idx)/60),curly_I(idx),'m*x+b'); 
 % %o=plot(fitted1,'red');
 % %set(o,'LineWidth',2)
 % str = {['m = ',num2str(fitted1.m)],['b = ',num2str(fitted1.b)]};
@@ -559,7 +559,7 @@ noqpprel2 = noqpppart2/sum(noqpppart2);
 % legend off
 % ylabel('Impulsiveness Index [$$ln(min^{-1})$$]','fontsize',14,'interpreter','latex');
 % xlabel('Decay Phase Duration [$$ln(min)$$]','fontsize',14,'interpreter','latex');
-% title('$$i$$ vs. $$t_{decay}$$ ($$r^2 = 0.054$$)','FontSize',22,'interpreter','latex');
+% title('$$i$$ vs. $$t_{decay}$$ ($$r^2 = 0.083$$)','FontSize',22,'interpreter','latex');
 % % itle('$$i$$ vs. QPP Period ($$r^2 = 0.288$$)','FontSize',22,'interpreter','latex');
 % % 
 % % saveas(h,'/Users/owner/Desktop/imp_decaydur_more_loglog.fig');
@@ -570,14 +570,14 @@ noqpprel2 = noqpppart2/sum(noqpppart2);
 % % clf
 % subplot(1,3,3)
 % set(gcf,'Position',[300 300 1200 500])
-% scatter(log(overall_dur/60),log(curly_I*60),200,log(curly_I*60),'.');
+% scatter(log(overall_dur/60),curly_I,200,curly_I,'.');
 % 
 % grid on
 % hold on
 % pbaspect([1 1 1])
 % idx = isfinite(curly_I) & isfinite(overall_dur);
 % 
-% fitted2 = fit(log(overall_dur(idx)/60),log(curly_I(idx)*60),'m*x+b'); 
+% fitted2 = fit(log(overall_dur(idx)/60),curly_I(idx),'m*x+b'); 
 % p=plot(fitted2,'red');
 % set(p,'LineWidth',2)
 % 
@@ -587,10 +587,10 @@ noqpprel2 = noqpppart2/sum(noqpppart2);
 % legend off
 % ylabel('Impulsiveness Index [$$ln(min^{-1})$$]','fontsize',14,'interpreter','latex');
 % xlabel('Flare Duration [$$ln(min)$$]','fontsize',14,'interpreter','latex');
-% title(['$$i$$ vs. $$t_{flare}$$ ($$r^2 = 0.105$$)'],'FontSize',22,'interpreter','latex');
+% title(['$$i$$ vs. $$t_{flare}$$ ($$r^2 = 0.132$$)'],'FontSize',22,'interpreter','latex');
+% % % 
 % % 
-% 
-% saveas(l,'/Users/owner/Desktop/imp_overdur_more_loglog.fig');
-% saveas(l,'/Users/owner/Desktop/imp_overdur_more_loglog.png');
-% 
-% saveas(l,'/Users/owner/Desktop/fig5.png');
+% % saveas(l,'/Users/owner/Desktop/imp_overdur_more_loglog.fig');
+% % saveas(l,'/Users/owner/Desktop/imp_overdur_more_loglog.png');
+% % 
+% % saveas(l,'/Users/owner/Desktop/fig5.png');
