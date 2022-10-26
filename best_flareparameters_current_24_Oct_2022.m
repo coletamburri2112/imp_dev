@@ -993,7 +993,8 @@ for i=1:2049
     %         clf
     %         set(gcf,'Position',[100 100 1500 1500])
     %    end
-    
+        event_curves(t,1:length(irrev))=irrev/(1e-3);
+        event_times(t,1:length(timeev))=timeev;
          end
 end
 
