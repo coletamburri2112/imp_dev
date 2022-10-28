@@ -29,7 +29,7 @@ starti=100000; %initialize to something outside range
 %and 2014
 filename=['/Users/owner/Desktop/CU_Research/sdoeve304_2.mat'];
 load(filename);
-%mkdir('/Users/owner/Desktop/fake/');
+
 ribbondb_info = readtable(['/Users/owner/Desktop/Oct_2022_Imp/imp_dev/ribbondb_v1.0.csv']);
 %initialize arrays
 starttimes=NaN(2049,1);
@@ -43,32 +43,20 @@ event_times =NaN(2049,100000);
 starttimes_corr =NaN(2049,2);
 maxtimes_corr =NaN(2049,2);
 endtimes_corr =NaN(2049,2);
-l=0
-% decay_gof=cell(2049,1);
-% impulse_gof=cell(2049,1);
-% decay_chi = cell(2049,1);
-% decay_pval = cell(2049,1);
-% decay_chistats = cell(2049,1);
-% rsqurs_exp2_four2 = NaN(2049,2);
-% rsqurs_3_four2 = NaN(2049,2);
-% decay_chistats_byhand = cell(2049,1);
-% errs = cell(2049,1);
-% chisquareds = cell(2049,2);
-% chisquareds{1}={'Chi-Squared, sdo/eve error','Reduced Chi-Squared, sdo/eve error','Reduced Chi-Squared, verification, sdo/eve error','Reduced Chi-Squared, errors from sq'};
-% significance = 0.05;
+rsqurs_exp2_four2 = NaN(2049,2);
+chisquareds = cell(2049,2);
+chisquareds{1}={'Chi-Squared, sdo/eve error',['Reduced Chi-Squared, ' ...
+    'sdo/eve error'],'Reduced Chi-Squared, verification, sdo/eve error',
+    'Reduced Chi-Squared, errors from sq'};
+significance = 0.05;
 endj=NaN;
 tst=0;
-% rise_chi = cell(2049,1);
-% rise_pval = cell(2049,1);
-% rise_chistats = cell(2049,1);
-% rise_chistats_byhand = cell(2049,1);
 
 %after verification with ribbondb database, write array which actually
 %contains the true indices of the correct flares in the database
 vettedbest_corrected =NaN(500,1);
 % 
 t=0;
-% fg=1;
 
 for i=1:2049
         t=t+1;
@@ -839,56 +827,6 @@ for i=1:2049
                         end
                         errtab(u,m) = cc(1,2);                    
     
-%                         if u == 1
-%                             resid = spl_rise-rise_fit_exp1_hr;
-%                             stand_dev = nanstd(resid);
-%                             chisq = 0;
-%                             %option 3 using errorbars from sdo/eve file - see other
-%                             %options in original file
-%                             for t=1:length(resid)
-%                                 chi=(resid(t)/riseerr(t))^2;
-%                                 chisq=chisq+chi;
-%                             end
-%                             df = length(spl_riset)-n_coeff(u);
-%                             redchisq1 = chisq/df;
-%                             %option 4 using errorbars from sdo/eve file but using the
-%                             %equation from formula
-%                             redchisq2=chi_squared(spl_rise,rise_fit_exp1_hr,n_coeff(u),riseerr);
-%                         elseif u == 2
-%                             resid = spl_rise - rise_fit_exp2_hr;
-%                             stand_dev = nanstd(resid);
-%                             chisq=0;
-%                             %option 3 using errorbars from file
-%                             for t=1:length(resid)
-%                                 chi=(resid(t)/riseerr(t))^2;
-%                                 chisq=chisq+chi;
-%                             end
-%                              %option 4 using errorbars from sdo/eve file but using the
-%                             %equation from formula
-%                             redchisq2=chi_squared(spl_rise,rise_fit_exp2_hr,n_coeff(u),riseerr);
-%                             df = length(spl_rise)-n_coeff(u);
-%                             redchisq1 = chisq/df;
-%                         elseif u > 2
-%     
-%                             resid = spl_decay - decaymods(:,u-2);
-%                                 stand_dev = nanstd(resid);
-%                             for h=1:length(spl_decay)
-%                                 sqerrstd3(h) = sqerr;
-%                             end
-%                             chisq=0;
-%                             for t=1:length(resid)
-%                                 chi=(resid(t)/decayerr(t))^2;
-%                                 chisq=chisq+chi;
-%                             end
-%                             df = length(spl_decay)-n_coeff(u-2);
-%                             redchisq1 = chisq/df;
-%                              %option 4 using errorbars from sdo/eve file but using the
-%                             %equation from formula
-%                             redchisq2=chi_squared(spl_decay,decaymods(:,u-2),n_coeff(u),decayerr');
-%                         end
-%                         chisqs(u,1) = chisq;
-%                         chisqs(u,2) = redchisq1;
-%                         chisqs(u,3) = redchisq2;
                     end
                     errtab(:,11) = adjrsq;
                     errtable = array2table(errtab,'VariableNames',errstrwr2,'RowNames',{'RiseExp1','RiseExp2','DecayPwr1','DecayPwr2','DecayFour1','DecayFour2','DecayFour3','DecayFour4'});
@@ -899,13 +837,12 @@ for i=1:2049
                     modresid_rise_exp2 = spl_rise - rise_fit_exp2_hr;
                     modresid_rise_exp1 = spl_rise - rise_fit_exp1_hr;
                     modresid_decay = spl_decay - decay_fitfour2;
-                    mkdir('/Users/owner/Desktop/modeleval');
     
                     rsqurs_exp2_four2(i,1) = rise_exp2_r2;
                     rsqurs_exp2_four2(i,2) = decay_four2_r2;
                     
                 else
-                    flags{i}='1' %if the fit was too short on either side
+                    flags{i}='1'; %if the fit was too short on either side
                 end
             end
                 
@@ -913,94 +850,8 @@ for i=1:2049
         
         flid = char(ribbondb_info{i,2});
         fltitle = flid(1:8);
-        
-    
-%         plotting - indices leave something to be desired
-%         if maxind(1) > 1 && strcmp(flags{i},'1') == 0
-%                 
-%                 figin = ceil(i/25);
-%                 figfl = floor(i/26);
-%                 figure(1)
-%                 a=subplot(5,5,i-25*(figin-1))
-%                 scatter(windowthr,smspl'/(1e-3),'r','.');
-%                 hold on
-%                 scatter(risehr_t,rise_fit_exp2_hr/(1e-3),'.');
-%                 scatter(decayhr_t,decay_fitfour2/(1e-3),'.');
-%                 title([fltitle ' [' num2str(curly_Is(i)) ']'],'Interpreter','None');
-%               
-%                 flags{i} ='0'; %%% WHY THIS LINE?
-%         
-%     
-%         elseif maxind(1) ~= 1 && strcmp(flags{i},'1') == 0
-%                 
-%                 figin = ceil(i/25);
-%                 figfl = floor(i/26);
-%                 figure(1)
-%                 subplot(5,5,i-25*(figin-1))
-%                 cla(f)
-%                 scatter(timeev,irrev/(1e-3),'r','.');
-%     
-%                 title(fltitle,'Interpreter', 'none');
-%          
-%         
-%         elseif strcmp(flags{i},'1') == 1
-%             
-%             figin = ceil(i/25);
-%             figfl = floor(i/26);
-%             f=figure(1)
-%             subplot(5,5,i-25*(figin-1))
-%             cla(f)
-%             scatter(timeev,zeros(length(timeev),1),'r','.');
-%       
-%              title(fltitle,'Interpreter', 'none');
-%             
-%        
-%         end
-%         
-%         else
-%             
-%             figin = ceil(i/25);
-%             figfl = floor(i/26);
-%             f=figure(1)
-%             subplot(5,5,i-25*(figin-1))
-%             cla(f)
-%             scatter(timeev,zeros(length(timeev),1),'r','.');
-%       
-%              %title(fltitle,'Interpreter', 'none');
-%             
-%         
-%             
-%         end
-%         if i-25*(figin-1) == 1
-%             subplot(5,5,i-25*(figin-1));
-%             xlabel('Datetime');
-%             ylabel('Flux (mW/m^2)');
-%         end
-%         %if rem(i,length(i))==0
-%             sgtitle('Format: YYYYMMDD_(starttime) [impulsivity]','Interpreter','none');
-%         %end
-%         if rem(i,25) == 0 || i == length(windowstart2)
-%             saveas(f,['/Users/owner/Desktop/flaresummary_ver/flares',num2str(i-24),'to',num2str(i),'.png']);
-%             f=figure(1);
-%             clf
-%             set(gcf,'Position',[100 100 1500 1500])
-%        end
     
          
 end
-
-%%save(filename,'fits','-append');
-
-%  save(filename,'chisquareds','-append');
-%  save(filename,'errs','-append');
-%  save(filename,'rsqurs_exp2_four2','-append');
-%  save(filename,'flags','-append');
-%  %save(filename,'rsqurs_3_four2','-append');
-% %save(filename,'rise_chi','rise_pval','rise_chistats','-append');
-%     
-% %once all flares have been dealt with, consider saving all the parameters
-% %you've calculated to an array and put in the same file which was loaded
-% %before
-% save(filename2,'starttimes','endtimes','maxtimes','curly_Is','windowstart2');
 
     
