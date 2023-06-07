@@ -104,7 +104,7 @@ curly_I_low3 = curly_I(pat_in3,:);
 % legend off
 % a=colorbar;
 % hl = ylabel(a,'\textsf{Impulsiveness}','fontsize',20,'interpreter','latex');
-% 
+
 % 
 % title('$$i$$ \textsf{vs. Reconnection Rate,} $$r^2 = 0.029$$','fontsize',25,'interpreter','latex')
 
