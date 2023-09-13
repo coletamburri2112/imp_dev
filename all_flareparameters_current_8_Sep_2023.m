@@ -27,10 +27,10 @@ starti=100000; %initialize to something outside range
 %load the file sdoeve304, which containts the data for the 304A line as
 %recorded by SDO/EVE for the extent of the MEGS-B experiment, between 2010
 %and 2014
-filename=['/Users/coletamburri/Desktop/sdoeve304_2.mat'];
+filename=['/Users/coletamburri/Desktop/Old Mac/CU_Research/sdoeve304_2.mat'];
 load(filename);
 
-ribbondb_info = readtable(['/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/ribbondb_v1.0.csv']);
+ribbondb_info = readtable(['/Users/coletamburri/Desktop/imp_dev/ribbondb_v1.0.csv']);
 %initialize arrays
 starttimes=NaN(2049,1);
 endtimes=NaN(2049,1);
@@ -59,6 +59,9 @@ vettedbest_corrected =NaN(500,1);
 t=0;
 
 for i=1:2049
+    if i ==1552
+        disp('break')
+    end
     disp(string(i))
         t=t+1;
     
