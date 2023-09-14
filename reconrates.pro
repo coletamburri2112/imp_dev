@@ -37,7 +37,7 @@ for i= 1,500 do begin
   mediannegrec = []
   flarename =flaredirectories[i]
   iflare = flareinds[i]
-  plot_rbn4cole,cut=8,maxposrecrate=maxposrecrate,maxnegrecrate=maxnegrecrate,maximpposrec=maximpposrec,maximpnegrec=maximpnegrec,avgposrec=avgposrec,avgnegrec=avgnegrec,stdposrec=stdposrec,stdnegrec=stdnegrec,medianposrec=medianposrec,mediannegrec=mediannegrec,flaredir0=flarename,dir='/Users/owner/Desktop/CU_Research/REC_RATES/recfiles_rad/',iflare=iflare
+  plot_rbn4cole,cut=8,maxposrecrate=maxposrecrate,maxnegrecrate=maxnegrecrate,maximpposrec=maximpposrec,maximpnegrec=maximpnegrec,avgposrec=avgposrec,avgnegrec=avgnegrec,stdposrec=stdposrec,stdnegrec=stdnegrec,medianposrec=medianposrec,mediannegrec=mediannegrec,flaredir0=flarename,dir='/Users/coletamburri/Desktop/Old Mac/CU_Research/REC_RATES/recfiles_rad/',iflare=iflare
   stdrecs[i-1,0]=stdposrec
   stdrecs[i-1,1]=stdnegrec
   meanrecs[i-1,0]=avgposrec

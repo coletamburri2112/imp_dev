@@ -94,10 +94,14 @@ set(gcf,'Position',[300 300 550 550])
 idx = isfinite(recmax(:,1)) & isfinite(curly_I);
 fitted0 = fit(recmax(idx,1)/1e18,curly_I(idx),'m*x+b'); 
 
-k=plot(fitted0,'red');
+k=plot(fitted0);
+cbHandles = findobj(k);
+set(cbHandles, 'Color', '#332288','LineWidth',40)
+
+
 hold on
 set(k,'LineWidth',2)
-scatter(recmax(:,1)/1e18,curly_I,200,curly_I,'.');
+scatter(recmax(:,1)/1e18,curly_I,200,'.','MarkerEdgeColor','#882255');
 grid on
 xlabel('\textsf{Reconnection Rate} [$$10^{18} Mx/s$$]','fontsize',20,'interpreter','latex')
 ylabel('\textsf{Impulsiveness Index} [$$ln(min^{-1})$$]','fontsize',20,'interpreter','latex')
@@ -105,11 +109,11 @@ ax=gca;
 ax.FontSize = 20;
 xlim([0 35])
 legend off
-a=colorbar;
-hl = ylabel(a,'\textsf{Impulsiveness}','fontsize',20,'interpreter','latex');
+%a=colorbar;
+%hl = ylabel(a,'\textsf{Impulsiveness}','fontsize',20,'interpreter','latex');
 
 % 
-title('$$i$$ \textsf{vs. Reconnection Rate,} $$r^2 = 0.029$$','fontsize',25,'interpreter','latex')
+title('$$i$$ \textsf{vs. Reconnection Rate,} $$r^2 = 0.195$$','fontsize',25,'interpreter','latex')
 
 % 
 % % pbaspect([1 1 1])
