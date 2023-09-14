@@ -23,9 +23,9 @@
 
 %clear workspace
  clear;
-filename=['/Users/coletamburri/Desktop/sdoeve304_2.mat'];
-ribbondb_info = readtable(['/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/ribbondb_v1.0.csv']);
-filename2='/Users/coletamburri/Desktop/all_and_best_Sep_2023.mat';
+filename=['/Users/coletamburri/Desktop/Old Mac/CU_Research/sdoeve304_2.mat'];
+ribbondb_info = readtable(['/Users/coletamburri/Desktop/imp_dev/ribbondb_v1.0.csv']);
+filename2='/Users/coletamburri/Desktop/imp_dev/all_and_best_Sep_2023.mat';
 load(filename)
 load(filename2)
 
@@ -570,6 +570,7 @@ for i=1:2049
         
         %Store the times in arrays initialized above
         starttimes_corr(t,1)=tst;
+
         endtimes_corr(t,1)=tend;
         maxtimes_corr(t,1)=maxt;
         starttimes_corr(t,2)=i;
@@ -747,7 +748,10 @@ for i=1:2049
 
         event_curves(t,1:length(irrev))=irrev/(1e-3);
         event_times(t,1:length(timeev))=timeev;
+
          end
+
+        
 end
 
 
