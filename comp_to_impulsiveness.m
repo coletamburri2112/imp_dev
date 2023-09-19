@@ -1,12 +1,12 @@
 %script to make comparison between impulsiveness and other quantities
 clear;
-imp_file = '/Users/coletamburri/Desktop/imp_dev/all_and_best_Sep_2023.mat';
+imp_file = '/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/all_and_best_Sep_2023.mat';
 imp_data = load(imp_file,'curly_Is_best','curly_Is','curly_Is_relative',...
     'curly_Is_relative_best', ...
     'starttimes_corr','maxtimes_corr','endtimes_corr', ...
     'bestflaresname');
 
-rec_data = restore_idl('/Users/coletamburri/Desktop/imp_dev/recratesidl.sav');
+rec_data = restore_idl('/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/recratesidl.sav');
 
 flarenames = imp_data.bestflaresname;
 pat1 = ["C"]; 
@@ -86,34 +86,34 @@ curly_I_low3 = curly_I(pat_in3,:);
 % 
 %comparison to max rec rate overall
 %all flares
-l=figure(5)
-clf
-colormap cool
-%subplot(2,1,1)
-set(gcf,'Position',[300 300 550 550])
-idx = isfinite(recmax(:,1)) & isfinite(curly_I);
-fitted0 = fit(recmax(idx,1)/1e18,curly_I(idx),'m*x+b'); 
-
-k=plot(fitted0);
-cbHandles = findobj(k);
-set(cbHandles, 'Color', '#332288','LineWidth',40)
-
-
-hold on
-set(k,'LineWidth',2)
-scatter(recmax(:,1)/1e18,curly_I,200,'.','MarkerEdgeColor','#882255');
-grid on
-xlabel('\textsf{Reconnection Rate} [$$10^{18} Mx/s$$]','fontsize',20,'interpreter','latex')
-ylabel('\textsf{Impulsiveness Index} [$$ln(min^{-1})$$]','fontsize',20,'interpreter','latex')
-ax=gca;
-ax.FontSize = 20;
-xlim([0 35])
-legend off
-%a=colorbar;
-%hl = ylabel(a,'\textsf{Impulsiveness}','fontsize',20,'interpreter','latex');
-
+% l=figure(5)
+% clf
+% colormap cool
+% %subplot(2,1,1)
+% set(gcf,'Position',[300 300 550 550])
+% idx = isfinite(recmax(:,1)) & isfinite(curly_I);
+% fitted0 = fit(recmax(idx,1)/1e18,curly_I(idx),'m*x+b'); 
 % 
-title('$$i$$ \textsf{vs. Reconnection Rate,} $$r^2 = 0.195$$','fontsize',25,'interpreter','latex')
+% k=plot(fitted0);
+% cbHandles = findobj(k);
+% set(cbHandles, 'Color', '#332288','LineWidth',40)
+% 
+% 
+% hold on
+% set(k,'LineWidth',2)
+% scatter(recmax(:,1)/1e18,curly_I,200,'.','MarkerEdgeColor','#882255');
+% grid on
+% xlabel('\textsf{Reconnection Rate} [$$10^{18} Mx/s$$]','fontsize',20,'interpreter','latex')
+% ylabel('\textsf{Impulsiveness Index} [$$ln(min^{-1})$$]','fontsize',20,'interpreter','latex')
+% ax=gca;
+% ax.FontSize = 20;
+% xlim([0 35])
+% legend off
+% %a=colorbar;
+% %hl = ylabel(a,'\textsf{Impulsiveness}','fontsize',20,'interpreter','latex');
+% 
+% % 
+% title('$$i$$ \textsf{vs. Reconnection Rate,} $$r^2 = 0.195$$','fontsize',25,'interpreter','latex')
 
 % 
 % % pbaspect([1 1 1])
@@ -506,77 +506,77 @@ end
 % plasma=plasma();
 % viridis=viridis();
 % %%comparison of rise to decay phase
-% l=figure(5)
-% set(gcf,'Position',[300 300 1300 500])
-% 
-% clf
-% subplot(1,12,1:5)
-% rise_dur_nonan(403)=[];
-% dec_dur_nonan(403)=[]; 
-% curly_I_cp=curly_I;
-% 
-% rise_dur_cp = rise_dur;
-% dec_dur_cp = dec_dur;
-% overall_dur_cp = overall_dur;
-% curly_I_cp(403)=[];
-% rise_dur_cp(403)=[];
-% dec_dur_cp(403)=[];
-% overall_dur_cp(403)=[];
-% idx = isfinite(curly_I_cp) & isfinite(rise_dur_cp);
-% %l=figure(5)
-% %set(gcf,'Position',[300 300 600 600])
-% 
-% colormap viridis
-% 
-% scatter(dec_dur_nonan/60,rise_dur_nonan/60,200,curly_I_cp(idx),'.');
-% ax = gca;
-% ax.FontSize=15;
-% ylabel('Rise Phase Duration $[min]$','fontsize',20,'interpreter','latex')
-% xlabel('Decay Phase Duration $[min]$','fontsize',20,'interpreter','latex')
-% title('$t_{rise}$ vs. $t_{decay}$','fontsize',30,'interpreter','latex')
-% 
-% 
-% p = polyfit(dec_dur_nonan/60,rise_dur_nonan/60,1);
-% yfit = polyval(p,dec_dur_nonan/60);
-% hold on
-% grid on
-% k = plot(dec_dur_nonan/60,yfit,'red');
-% set(k,'LineWidth',2)
-% 
-% a=colorbar;
-% hl = ylabel(a,'Impulsiveness','fontsize',20,'interpreter','latex');
-% annotation('textbox', [0.31, 0.75, 0.08, 0.05], 'String', '$r^2 = 0.126$','interpreter','latex',fontsize=20)
-% 
-% subplot(1,12,7:12)
-% 
-% 
-% 
-% scatter(rise_dur_cp/60,curly_I_cp,20,'MarkerEdgeColor','#CC6677','MarkerFaceColor','#CC6677');
-% hold on
-% scatter(dec_dur_cp/60,curly_I_cp,20,'MarkerEdgeColor','#DDCC77','MarkerFaceColor','#DDCC77');
-% scatter(overall_dur_cp/60,curly_I_cp,20,'MarkerEdgeColor','#117733','MarkerFaceColor','#117733');
-% 
-% grid on
-% legend('$$t_{rise}$$ ($$r^2 = 0.036$$)','$$t_{dec}$$ ($$r^2 = 0.116$$)','$$t_{flare}$$ ($$r^2 = 0.146$$)','interpreter','latex','Fontsize',20)
-% ax = gca;
-% ax.FontSize=15;
-% idx = isfinite(curly_I_cp) & isfinite(rise_dur_cp);
-% 
-% fitted0 = fit(log(rise_dur_cp(idx)/60),curly_I_cp(idx),'m*x+b'); 
-% 
-% fitted1 = fit(log(dec_dur_cp(idx)/60),curly_I_cp(idx),'m*x+b'); 
-% fitted2 = fit(log(overall_dur_cp(idx)/60),curly_I_cp(idx),'m*x+b');
-% crise = corrcoef(log(rise_dur_cp(idx)/60),curly_I_cp(idx));
-% cdec = corrcoef(log(dec_dur_cp(idx)/60),curly_I_cp(idx));
-% cover = corrcoef(log(overall_dur_cp(idx)/60),curly_I_cp(idx));
-% %k=plot(fitted0,'red');
-% %set(k,'LineWidth',2)
-% 
-% set(gca,'xscale','log')
-% ylabel('Impulsiveness','fontsize',20,'interpreter','latex');
-% xlabel('Duration [min]','fontsize',20,'interpreter','latex');
-% title(['$$i$$ vs. $$t_{rise}$$, $$t_{decay}$$, $$t_{flare}$$'],'FontSize',30,'interpreter','latex');
-% xlim([5,500])
+l=figure(5)
+set(gcf,'Position',[300 300 1300 500])
+
+clf
+subplot(1,12,1:5)
+rise_dur_nonan(403)=[];
+dec_dur_nonan(403)=[]; 
+curly_I_cp=curly_I;
+
+rise_dur_cp = rise_dur;
+dec_dur_cp = dec_dur;
+overall_dur_cp = overall_dur;
+curly_I_cp(403)=[];
+rise_dur_cp(403)=[];
+dec_dur_cp(403)=[];
+overall_dur_cp(403)=[];
+idx = isfinite(curly_I_cp) & isfinite(rise_dur_cp);
+%l=figure(5)
+%set(gcf,'Position',[300 300 600 600])
+
+colormap viridis
+
+scatter(dec_dur_nonan/60,rise_dur_nonan/60,200,curly_I_cp(idx),'.');
+ax = gca;
+ax.FontSize=15;
+ylabel('Rise Phase Duration $[min]$','fontsize',20,'interpreter','latex')
+xlabel('Decay Phase Duration $[min]$','fontsize',20,'interpreter','latex')
+title('$t_{rise}$ vs. $t_{decay}$','fontsize',30,'interpreter','latex')
+
+
+p = polyfit(dec_dur_nonan/60,rise_dur_nonan/60,1);
+yfit = polyval(p,dec_dur_nonan/60);
+hold on
+grid on
+k = plot(dec_dur_nonan/60,yfit,'red');
+set(k,'LineWidth',2)
+
+a=colorbar;
+hl = ylabel(a,'Impulsiveness','fontsize',20,'interpreter','latex');
+annotation('textbox', [0.31, 0.75, 0.08, 0.05], 'String', '$r^2 = 0.126$','interpreter','latex',fontsize=20)
+
+subplot(1,12,7:12)
+
+
+
+scatter(rise_dur_cp/60,curly_I_cp,20,'MarkerEdgeColor','#CC6677','MarkerFaceColor','#CC6677');
+hold on
+scatter(dec_dur_cp/60,curly_I_cp,20,'MarkerEdgeColor','#DDCC77','MarkerFaceColor','#DDCC77');
+scatter(overall_dur_cp/60,curly_I_cp,20,'MarkerEdgeColor','#117733','MarkerFaceColor','#117733');
+
+grid on
+legend('$$t_{rise}$$ ($$r^2 = 0.036$$)','$$t_{dec}$$ ($$r^2 = 0.116$$)','$$t_{flare}$$ ($$r^2 = 0.146$$)','interpreter','latex','Fontsize',20)
+ax = gca;
+ax.FontSize=15;
+idx = isfinite(curly_I_cp) & isfinite(rise_dur_cp);
+
+fitted0 = fit(log(rise_dur_cp(idx)/60),curly_I_cp(idx),'m*x+b'); 
+
+fitted1 = fit(log(dec_dur_cp(idx)/60),curly_I_cp(idx),'m*x+b'); 
+fitted2 = fit(log(overall_dur_cp(idx)/60),curly_I_cp(idx),'m*x+b');
+crise = corrcoef(log(rise_dur_cp(idx)/60),curly_I_cp(idx));
+cdec = corrcoef(log(dec_dur_cp(idx)/60),curly_I_cp(idx));
+cover = corrcoef(log(overall_dur_cp(idx)/60),curly_I_cp(idx));
+%k=plot(fitted0,'red');
+%set(k,'LineWidth',2)
+
+set(gca,'xscale','log')
+ylabel('Impulsiveness','fontsize',20,'interpreter','latex');
+xlabel('Duration [min]','fontsize',20,'interpreter','latex');
+title(['$$i$$ vs. $$t_{rise}$$, $$t_{decay}$$, $$t_{flare}$$'],'FontSize',30,'interpreter','latex');
+xlim([5,500])
 % saveas(l,'/Users/owner/Desktop/Research/MAT_SOURCE/impcomp/rise_dec_comp_more.fig');
 % saveas(l,'/Users/owner/Desktop/Research/MAT_SOURCE/impcomp/rise_dec_comp_more.png');
 % % % 

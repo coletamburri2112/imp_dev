@@ -5,7 +5,7 @@ pro reconrates
   medianrecs=make_array(500,2)
   maximprecs=make_array(500,2)
   maxrecrates=make_array(500,2)
-  file = '/Users/coletamburri/Desktop/best500.txt'
+  file = '/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/best500.txt'
   OPENR, lun, file, /GET_LUN
   ; Read one line at a time, saving the result into array
   flaredirectories = ''
@@ -15,7 +15,7 @@ pro reconrates
     flaredirectories= [flaredirectories, line] & $
   ENDWHILE
   
-  file2 = '/Users/coletamburri/Desktop/best500inds.txt'
+  file2 = '/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/best500inds.txt'
   OPENR, lun2, file2, /GET_LUN
   ; Read one line at a time, saving the result into array
   flareinds = ''
