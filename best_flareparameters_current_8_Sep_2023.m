@@ -24,8 +24,8 @@
 %clear workspace
  clear;
 filename=['/Users/coletamburri/Desktop/Old Mac/CU_Research/sdoeve304_2.mat'];
-ribbondb_info = readtable(['/Users/coletamburri/Desktop/imp_dev/ribbondb_v1.0.csv']);
-filename2='/Users/coletamburri/Desktop/imp_dev/all_and_best_Sep_2023.mat';
+ribbondb_info = readtable(['/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/ribbondb_v1.0.csv']);
+filename2='/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/all_and_best_Sep_2023.mat';
 load(filename)
 load(filename2)
 
@@ -738,14 +738,15 @@ for i=1:2049
                 
         end
         
-        % clf
-        % f2 = figure('visible','off');
-        % plot(timeev,irrev)
-        % hold on
-        % xline(timeev(starti))
-        % xline(timeev(endj))
-        % saveas(gcf,'/Users/coletamburri/Desktop/bestflares/'+[string(i)+'.png'])
-
+        clf
+        f2 = figure('visible','off');
+        plot(timeev,irrev)
+        hold on
+        xline(timeev(starti))
+        xline(timeev(endj))
+        plot(timeev,sqev)
+        saveas(gcf,'/Users/coletamburri/Desktop/bestflares/'+[string(i)+'.png'])
+        
         event_curves(t,1:length(irrev))=irrev/(1e-3);
         event_times(t,1:length(timeev))=timeev;
 
