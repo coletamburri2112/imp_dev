@@ -551,16 +551,22 @@ subplot(1,12,7:12)
 
 
 
-scatter(rise_dur_cp/60,curly_I_cp,20,'MarkerEdgeColor','#CC6677','MarkerFaceColor','#CC6677');
+scatter(rise_dur_cp/60,curly_I_cp,20,'MarkerEdgeColor','black','MarkerFaceColor','#CC6677');
 hold on
-scatter(dec_dur_cp/60,curly_I_cp,20,'MarkerEdgeColor','#DDCC77','MarkerFaceColor','#DDCC77');
-scatter(overall_dur_cp/60,curly_I_cp,20,'MarkerEdgeColor','#117733','MarkerFaceColor','#117733');
+scatter(dec_dur_cp/60,curly_I_cp,20,'MarkerEdgeColor','black','MarkerFaceColor','#DDCC77');
+scatter(overall_dur_cp/60,curly_I_cp,20,'MarkerEdgeColor','black','MarkerFaceColor','#117733');
 
 grid on
-legend('$$t_{rise}$$ ($$r^2 = 0.036$$)','$$t_{dec}$$ ($$r^2 = 0.116$$)','$$t_{flare}$$ ($$r^2 = 0.146$$)','interpreter','latex','Fontsize',20)
 ax = gca;
 ax.FontSize=15;
 idx = isfinite(curly_I_cp) & isfinite(rise_dur_cp);
+
+yregion(-8,-6,'FaceColor','#6699CC','FaceAlpha',0.3)
+
+yregion(-6,-5,'FaceColor','#EECC66','FaceAlpha',0.3)
+
+yregion(-5,-1,'FaceColor','#EE99AA','FaceAlpha',0.3)
+legend('$$t_{rise}$$ ($$r^2 = 0.036$$)','$$t_{dec}$$ ($$r^2 = 0.116$$)','$$t_{flare}$$ ($$r^2 = 0.146$$)','','','','interpreter','latex','Fontsize',20)
 
 fitted0 = fit(log(rise_dur_cp(idx)/60),curly_I_cp(idx),'m*x+b'); 
 
