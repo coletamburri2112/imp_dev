@@ -1,11 +1,11 @@
 pro reconrates
   ;index 0 is positive rate, index 1 is negative rate
-  stdrecs=make_array(500,2)
-  meanrecs=make_array(500,2)
-  medianrecs=make_array(500,2)
-  maximprecs=make_array(500,2)
-  maxrecrates=make_array(500,2)
-  file = '/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/best500.txt'
+  stdrecs=make_array(481,2)
+  meanrecs=make_array(481,2)
+  medianrecs=make_array(481,2)
+  maximprecs=make_array(481,2)
+  maxrecrates=make_array(481,2)
+  file = '/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/best_r2corr.txt'
   OPENR, lun, file, /GET_LUN
   ; Read one line at a time, saving the result into array
   flaredirectories = ''
@@ -15,7 +15,7 @@ pro reconrates
     flaredirectories= [flaredirectories, line] & $
   ENDWHILE
   
-  file2 = '/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/best500inds.txt'
+  file2 = '/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/best_r2corr_inds.txt'
   OPENR, lun2, file2, /GET_LUN
   ; Read one line at a time, saving the result into array
   flareinds = ''
@@ -27,7 +27,7 @@ pro reconrates
 ; Close the file and free the file unit
 FREE_LUN, lun
 FREE_LUN, lun2
-for i= 1,500 do begin
+for i= 1,481 do begin
   print,i
   avgposrec = []
   avgnegrec = []
@@ -50,6 +50,6 @@ for i= 1,500 do begin
   maxrecrates[i-1,1]=maxnegrecrate
   
 endfor
-SAVE,maximprecs,maxrecrates,stdrecs,meanrecs,medianrecs,flaredirectories,flareinds, FILENAME = '/Users/coletamburri/Desktop/imp_dev/recratesidl.sav'
+SAVE,maximprecs,maxrecrates,stdrecs,meanrecs,medianrecs,flaredirectories,flareinds, FILENAME = '/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/recratesidl_r2corr.sav'
 
 end

@@ -1,12 +1,12 @@
 %script to make comparison between impulsiveness and other quantities
 clear;
-imp_file = '/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/all_and_best_Sep_2023.mat';
+imp_file = '/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/all_and_best_Jan_2024_alt.mat';
 imp_data = load(imp_file,'curly_Is_best','curly_Is','curly_Is_relative',...
     'curly_Is_relative_best', ...
     'starttimes_corr','maxtimes_corr','endtimes_corr', ...
-    'bestflaresname');
+    'bestflaresname','t_hhs');
 
-rec_data = restore_idl('/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/recratesidl.sav');
+rec_data = restore_idl('/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/recratesidl_r2corr.sav');
 
 flarenames = imp_data.bestflaresname;
 pat1 = ["C"]; 
@@ -25,6 +25,7 @@ imp_peak = imp_data.maxtimes_corr;
 imp_end = imp_data.endtimes_corr;
 % qpp_per = imp_data.bestimp_qpp_period_relative;
 imp_ind_all = imp_data.curly_Is_relative;
+t_hhs = imp_data.t_hhs;
 
 
 
@@ -46,6 +47,7 @@ rise_dur = (imp_peak(:,1)-imp_start(:,1))*24*3600;
 dec_dur = (imp_end(:,1)-imp_peak(:,1))*24*3600;
 overall_dur = (imp_end(:,1)-imp_start(:,1))*24*3600;
 curly_I_all = imp_ind_all(:,1);
+t_hhs1 = t_hhs(:,1);
 
 curly_I_low = curly_I(pat_in);
 % recmean_low = recmean(pat_in,:);
@@ -238,6 +240,8 @@ for i = 1:length(curly_I)
     if isnan(curly_I(i))
         t=t;
     else
+        overall_dur_nonan(t) = overall_dur(i)';
+        t_hhs_nonan(t) = t_hhs1(i);
         rise_dur_nonan(t)=rise_dur(i);
         dec_dur_nonan(t)=dec_dur(i);  
         t=t+1;
@@ -506,22 +510,70 @@ end
 % plasma=plasma();
 % viridis=viridis();
 % %%comparison of rise to decay phase
+l=figure(6)
+set(gcf,'Position',[300 300 500 500])
+
+clf
+%subplot(1,12,1:5)
+% rise_dur_nonan(403)=[];
+% dec_dur_nonan(403)=[]; 
+ curly_I_cp=curly_I;
+% 
+rise_dur_cp = rise_dur;
+dec_dur_cp = dec_dur;
+t_hhs1_cp = t_hhs1;
+overall_dur_cp = overall_dur;
+
+curly_I_cp(388)=[];
+rise_dur_cp(388)=[];
+dec_dur_cp(388)=[];
+overall_dur_cp(388)=[];
+t_hhs1_cp(388) = [];
+% rise_dur_nonan(388)=[];
+% dec_dur_nonan(388)=[]; 
+idx = isfinite(t_hhs1) & isfinite(overall_dur);
+%l=figure(5)
+%set(gcf,'Position',[300 300 600 600])
+
+colormap viridis
+
+scatter(t_hhs1_cp*60,overall_dur_cp/60,200,curly_I_cp,'.');
+ax = gca;
+ax.FontSize=15;
+xlabel('Impulsive Phase Duration $[min]$','fontsize',20,'interpreter','latex')
+ylabel('Flare Duration $[min]$','fontsize',20,'interpreter','latex')
+title('$t_{1/2}$ vs. $t_{flare}$','fontsize',30,'interpreter','latex')
+
+
+p = polyfit(t_hhs1_cp*60,rise_dur_nonan/60,1);
+set(gca,'xscale','log')
+set(gca,'yscale','log')
+yfit = polyval(p,t_hhs1_cp*60);
+hold on
+grid on
+k = plot(t_hhs1_cp*60,yfit,'red');
+set(k,'LineWidth',2)
+
+a=colorbar;
+%hl = ylabel(a,'Impulsiveness','fontsize',20,'interpreter','latex');
+annotation('textbox', [0.31, 0.85, 0.08, 0.05], 'String', '$r^2 = 0.126$','interpreter','latex',fontsize=20)
+
+
 l=figure(5)
 set(gcf,'Position',[300 300 1300 500])
 
 clf
 subplot(1,12,1:5)
-rise_dur_nonan(403)=[];
-dec_dur_nonan(403)=[]; 
+
 curly_I_cp=curly_I;
 
 rise_dur_cp = rise_dur;
 dec_dur_cp = dec_dur;
 overall_dur_cp = overall_dur;
-curly_I_cp(403)=[];
-rise_dur_cp(403)=[];
-dec_dur_cp(403)=[];
-overall_dur_cp(403)=[];
+curly_I_cp(388)=[];
+rise_dur_cp(388)=[];
+dec_dur_cp(388)=[];
+overall_dur_cp(388)=[];
 idx = isfinite(curly_I_cp) & isfinite(rise_dur_cp);
 %l=figure(5)
 %set(gcf,'Position',[300 300 600 600])
@@ -537,15 +589,17 @@ title('$t_{rise}$ vs. $t_{decay}$','fontsize',30,'interpreter','latex')
 
 
 p = polyfit(dec_dur_nonan/60,rise_dur_nonan/60,1);
+set(gca,'xscale','log')
+set(gca,'yscale','log')
 yfit = polyval(p,dec_dur_nonan/60);
 hold on
 grid on
-k = plot(dec_dur_nonan/60,yfit,'red');
-set(k,'LineWidth',2)
+% k = plot(dec_dur_nonan/60,yfit,'red');
+% set(k,'LineWidth',2)
 
 a=colorbar;
 hl = ylabel(a,'Impulsiveness','fontsize',20,'interpreter','latex');
-annotation('textbox', [0.31, 0.75, 0.08, 0.05], 'String', '$r^2 = 0.126$','interpreter','latex',fontsize=20)
+annotation('textbox', [0.31, 0.85, 0.08, 0.05], 'String', '$r^2 = 0.129$','interpreter','latex',fontsize=20)
 
 subplot(1,12,7:12)
 
@@ -566,7 +620,7 @@ yregion(-8,-6,'FaceColor','#6699CC','FaceAlpha',0.3)
 yregion(-6,-5,'FaceColor','#EECC66','FaceAlpha',0.3)
 
 yregion(-5,-1,'FaceColor','#EE99AA','FaceAlpha',0.3)
-legend('$$t_{rise}$$ ($$r^2 = 0.036$$)','$$t_{dec}$$ ($$r^2 = 0.116$$)','$$t_{flare}$$ ($$r^2 = 0.146$$)','','','','interpreter','latex','Fontsize',20)
+legend('$$t_{rise}$$ ($$r^2 = 0.036$$)','$$t_{dec}$$ ($$r^2 = 0.117$$)','$$t_{flare}$$ ($$r^2 = 0.147$$)','','','','interpreter','latex','Fontsize',20)
 
 fitted0 = fit(log(rise_dur_cp(idx)/60),curly_I_cp(idx),'m*x+b'); 
 

@@ -29,9 +29,10 @@ filename2='/Users/coletamburri/Desktop/Impulsiveness_Paper/imp_dev/all_and_best_
 load(filename)
 load(filename2)
 
-mkdir('/Users/coletamburri/Desktop/bestflares/')
-is = bestsorted;
+mkdir('/Users/coletamburri/Desktop/bestflares_r2cut/')
+is = bestsorted_r2cut;
 l=1;
+bestlen = length(is);
 
 set(gcf,'Position',[100 100 1500 1500])
 endj=NaN;
@@ -39,24 +40,25 @@ tst=0;
 starttimes=datenum(starttimes);
 endtimes=datenum(endtimes);
 maxtimes =datenum(peaktimes);
-risebest =NaN(500,100000);
-decaybest =NaN(500,100000);
-risetime =NaN(500,100000);
-decaytime =NaN(500,100000);
-risemod =NaN(500,100000);
-decaymod =NaN(500,100000);
-curly_Is_best=NaN(500,2);
-curly_Is_relative_best=NaN(500,2);
-bestflaresname =cell(500,1);
-event_curves =NaN(500,100000);
-event_times =NaN(500,100000);
-starttimes_corr =NaN(500,2);
-maxtimes_corr =NaN(500,2);
-endtimes_corr =NaN(500,2);
+risebest =NaN(bestlen,100000);
+decaybest =NaN(bestlen,100000);
+risetime =NaN(bestlen,100000);
+decaytime =NaN(bestlen,100000);
+risemod =NaN(bestlen,100000);
+decaymod =NaN(bestlen,100000);
+curly_Is_best=NaN(bestlen,2);
+curly_Is_relative_best=NaN(bestlen,2);
+t_hhs = NaN(bestlen,2);
+bestflaresname =cell(bestlen,1);
+event_curves =NaN(bestlen,100000);
+event_times =NaN(bestlen,100000);
+starttimes_corr =NaN(bestlen,2);
+maxtimes_corr =NaN(bestlen,2);
+endtimes_corr =NaN(bestlen,2);
 
 %after verification with ribbondb database, write array which actually
 %contains the true indices of the correct flares in the database
-vettedbest_corrected =NaN(500,1);
+vettedbest_corrected =NaN(bestlen,1);
 % 
 t=0;
 fg=1;
@@ -713,6 +715,7 @@ for i=1:2049
 
                 curly_I_2=(maxI_304-sq_at_max(1))/sq_at_max(1)/t_hh;
                 
+                t_hhs(t,1) = t_hh;
                 curly_Is_best(t,1)=log(curly_I*1e6/24/3600);
 
                 curly_Is_relative_best(t,1)=log(curly_I_2/24/60);
@@ -745,7 +748,7 @@ for i=1:2049
         xline(timeev(starti))
         xline(timeev(endj))
         plot(timeev,sqev)
-        saveas(gcf,'/Users/coletamburri/Desktop/bestflares/'+[string(i)+'.png'])
+        %saveas(gcf,'/Users/coletamburri/Desktop/bestflares/'+[string(i)+'.png'])
         
         event_curves(t,1:length(irrev))=irrev/(1e-3);
         event_times(t,1:length(timeev))=timeev;
@@ -754,7 +757,7 @@ for i=1:2049
 
         
 end
-
+t_hhs(:,2) = sort(is); 
 
 curly_Is_best(:,2) = sort(is);
 curly_Is_relative_best(:,2) = sort(is);
